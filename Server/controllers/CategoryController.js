@@ -2,7 +2,7 @@ import category from '../models/Category.js';
 
 const index = async (req, res) => {
   try {
-    const categories = await category.find();
+    const categories = await category.find({ status: 'active' });
 
     if (!categories) {
       throw { code: 500, message: 'get category failed' };
@@ -25,6 +25,12 @@ const store = async (req, res) => {
   try {
     if (!req.body.title) {
       throw { code: 428, message: 'Title is Required!' };
+    }
+
+    // existing category cheking
+    const categotyExist = await category.findOne({ title: req.body.title });
+    if (categotyExist) {
+      throw { code: 409, message: 'Category Already Exist!' };
     }
 
     const title = req.body.title;

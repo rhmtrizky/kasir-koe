@@ -5,6 +5,15 @@ const Schema = mongoose.Schema(
     title: {
       type: String,
     },
+    thumbnail: {
+      type: String,
+    },
+    price: {
+      type: Number,
+    },
+    categoryId: {
+      type: mongoose.Schema.Types.ObjectId,
+    },
     status: {
       type: String,
       enum: ['active', 'inactive'],
@@ -24,4 +33,10 @@ const Schema = mongoose.Schema(
   }
 );
 
-export default mongoose.model('Category', Schema);
+Schema.virtual('categories', {
+  ref: 'Category',
+  localField: 'categoryId',
+  foreignField: '_id',
+});
+
+export default mongoose.model('Product', Schema);
