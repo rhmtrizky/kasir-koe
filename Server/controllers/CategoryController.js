@@ -1,5 +1,26 @@
 import category from '../models/Category.js';
 
+const index = async (req, res) => {
+  try {
+    const categories = await category.find();
+
+    if (!categories) {
+      throw { code: 500, message: 'get category failed' };
+    }
+
+    return res.status(200).json({
+      status: true,
+      total: categories.length,
+      categories,
+    });
+  } catch (err) {
+    return res.status(err.code).json({
+      status: false,
+      message: err.message,
+    });
+  }
+};
+
 const store = async (req, res) => {
   try {
     if (!req.body.title) {
@@ -30,4 +51,4 @@ const store = async (req, res) => {
   }
 };
 
-export { store };
+export { index, store };
