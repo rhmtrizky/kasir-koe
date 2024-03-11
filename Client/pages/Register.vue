@@ -22,6 +22,16 @@
           <v-btn class="mb-3 mr-3" color="primary">Register</v-btn>
         </v-card-actions>
       </v-card>
+      <p>
+        Kamu sudah punya akun?
+        <v-btn
+          to="/login"
+          plain
+          class="text-body-1 pl-0 text-capitalize font-italic"
+          color="blue"
+          >Login</v-btn
+        >
+      </p>
     </v-col>
   </v-row>
 </template>
