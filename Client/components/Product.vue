@@ -111,6 +111,11 @@ export default {
         });
       }, 800);
     },
+    selectedSearch(product) {
+      if (product) {
+        this.addToCart(product._id);
+      }
+    },
   },
   mounted() {
     this.fetchProducts();

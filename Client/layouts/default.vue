@@ -24,7 +24,7 @@
       </v-btn>
     </v-app-bar> -->
     <v-main>
-      <v-container fluid>
+      <v-container fill-height fluid>
         <Nuxt />
       </v-container>
     </v-main>
