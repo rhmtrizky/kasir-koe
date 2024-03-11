@@ -14,6 +14,9 @@ const index = async (req, res) => {
       categories,
     });
   } catch (err) {
+    if (!err.code) {
+      err.code = 500;
+    }
     return res.status(err.code).json({
       status: false,
       message: err.message,
@@ -50,6 +53,9 @@ const store = async (req, res) => {
       Category,
     });
   } catch (err) {
+    if (!err.code) {
+      err.code = 500;
+    }
     return res.status(err.code).json({
       status: false,
       message: err.message,

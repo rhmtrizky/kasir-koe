@@ -62,6 +62,9 @@ const register = async (req, res) => {
       User,
     });
   } catch (err) {
+    if (!err.code) {
+      err.code = 500;
+    }
     return res.status(err.code).json({
       status: false,
       message: err.message,
@@ -104,7 +107,7 @@ const login = async (req, res) => {
     });
   } catch (err) {
     if (!err.code) {
-      err.code === 500;
+      err.code = 500;
     }
     return res.status(err.code).json({
       status: false,
@@ -140,7 +143,7 @@ const refreshToken = async (req, res) => {
     });
   } catch (err) {
     if (!err.code) {
-      err.code === 500;
+      err.code = 500;
     }
     return res.status(err.code).json({
       status: false,
