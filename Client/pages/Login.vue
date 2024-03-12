@@ -7,13 +7,40 @@
         >
         <v-card-text>
           <v-form>
-            <v-text-field name="email" label="example@gmail.com" type="email" />
-            <v-text-field name="password" label="Password" type="password" />
+            <v-text-field
+              name="email"
+              label="Email"
+              type="email"
+              :rules="rules.email"
+              v-model="form.email"
+            />
+            <v-text-field
+              name="password"
+              label="Password"
+              type="password"
+              :rules="rules.password"
+              v-model="form.password"
+            />
+            <p
+              v-if="isWrong"
+              class="text-caption font-color-red text-lowercase font-italic my-0"
+            >
+              Email or Password is wrong!!
+            </p>
           </v-form>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn class="mb-3 mr-3" color="primary">Login</v-btn>
+          <v-btn
+            class="mb-3 mr-3"
+            color="primary"
+            @click="onSubmit"
+            :disabled="isDisable"
+          >
+            <span v-if="!isDisable">Login</span>
+            <v-progress-circular v-else color="primary" indeterminate>
+            </v-progress-circular>
+          </v-btn>
         </v-card-actions>
       </v-card>
       <p>
@@ -29,3 +56,39 @@
     </v-col>
   </v-row>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      isDisable: false,
+      isWrong: false,
+      form: {
+        email: "",
+        password: "",
+      },
+      rules: {
+        email: [(v) => !!v || "Email is required"],
+        password: [(v) => !!v || "Password is required"],
+      },
+    };
+  },
+  methods: {
+    onSubmit() {
+      this.isDisable = true;
+      this.$http
+        .$post("http://localhost:5000/auth/login", this.form)
+        .then((res) => {
+          this.isDisable = false;
+          // redirect to page home
+          this.isWrong = false;
+          this.$router.push("/");
+        })
+        .catch((err) => {
+          this.isDisable = false;
+          this.isWrong = true;
+        });
+    },
+  },
+};
+</script>

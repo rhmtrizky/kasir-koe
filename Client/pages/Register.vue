@@ -7,19 +7,56 @@
         >
         <v-card-text>
           <v-form>
-            <v-text-field name="name" label="Full Name" type="text" />
-            <v-text-field name="email" label="Email" type="email" />
-            <v-text-field name="password" label="Password" type="password" />
             <v-text-field
-              name="repasowrd"
+              name="fullname"
+              label="Full Name"
+              type="text"
+              :rules="rules.fullname"
+              v-model="form.fullname"
+            />
+            <v-text-field
+              name="email"
+              label="Email"
+              type="email"
+              :rules="rules.email"
+              v-model="form.email"
+              @keyup="checkEmail"
+            />
+            <p
+              v-if="alertEmailExist"
+              class="text-caption font-color-red text-lowercase font-italic my-0"
+            >
+              Email Already Exist!
+            </p>
+            <v-text-field
+              name="password"
+              label="Password"
+              type="password"
+              :rules="rules.password"
+              v-model="form.password"
+            />
+            <v-text-field
+              name="retype_pasword"
               label="Confirm Password"
               type="password"
+              :rules="rules.retype_password"
+              v-model="form.retype_password"
             />
           </v-form>
         </v-card-text>
+
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn class="mb-3 mr-3" color="primary">Register</v-btn>
+          <v-btn
+            @click="onSubmit"
+            class="mb-3 mr-3"
+            color="primary"
+            :disabled="isDisable"
+          >
+            <span v-if="!isDisable">Register</span>
+            <v-progress-circular v-else color="primary" indeterminate>
+            </v-progress-circular>
+          </v-btn>
         </v-card-actions>
       </v-card>
       <p>
@@ -35,3 +72,58 @@
     </v-col>
   </v-row>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      isDisable: false,
+      alertEmailExist: false,
+      form: {
+        fullname: "",
+        email: "",
+        password: "",
+        retype_password: "",
+      },
+      rules: {
+        fullname: [(v) => !!v || "Fullname is required"],
+        email: [
+          (v) => !!v || "Email is required",
+          (v) => /.+@.+/.test(v) || "Email invalid",
+        ],
+        password: [
+          (v) => !!v || "Password is required",
+          (v) =>
+            (v && v.length >= 6) ||
+            "Password must be greater than 6 characters",
+        ],
+        retype_password: [
+          (v) => v === this.form.password || "Password does not match",
+        ],
+      },
+    };
+  },
+  methods: {
+    checkEmail() {
+      this.$http
+        .$post("http://localhost:5000/auth/check-email", this.form)
+        .then((res) => {
+          this.alertEmailExist = false;
+        })
+        .catch((err) => {
+          this.alertEmailExist = true;
+        });
+    },
+    onSubmit() {
+      this.isDisable = true;
+      this.$http
+        .$post("http://localhost:5000/auth/register", this.form)
+        .then((res) => {
+          this.isDisable = false;
+          // redirect to page login
+          this.$router.push("/login");
+        });
+    },
+  },
+};
+</script>
