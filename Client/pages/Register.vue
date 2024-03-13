@@ -26,7 +26,7 @@
               v-if="alertEmailExist"
               class="text-caption font-color-red text-lowercase font-italic my-0"
             >
-              Email Already Exist!
+              {{ message }}
             </p>
             <v-text-field
               name="password"
@@ -75,8 +75,10 @@
 
 <script>
 export default {
+  middleware: ["unauthenticated"],
   data() {
     return {
+      message: "",
       isDisable: false,
       alertEmailExist: false,
       form: {
@@ -105,18 +107,19 @@ export default {
   },
   methods: {
     checkEmail() {
-      this.$http
+      this.$axios
         .$post("http://localhost:5000/auth/check-email", this.form)
         .then((res) => {
           this.alertEmailExist = false;
         })
         .catch((err) => {
+          this.message = err.response.data.message;
           this.alertEmailExist = true;
         });
     },
     onSubmit() {
       this.isDisable = true;
-      this.$http
+      this.$axios
         .$post("http://localhost:5000/auth/register", this.form)
         .then((res) => {
           this.isDisable = false;

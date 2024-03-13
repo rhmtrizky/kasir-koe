@@ -6,6 +6,7 @@
           v-for="(item, i) in items"
           :key="i"
           :to="item.to"
+          :disabled="isDisabled(item.to)"
           router
           exact
         >
@@ -50,10 +51,12 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   name: "DefaultLayout",
   data() {
     return {
+      isDisable: true,
       sideDrawer: false,
       fixed: false,
       items: [
@@ -66,6 +69,16 @@ export default {
           icon: "mdi-bell",
           title: "Notification",
           to: "/notification",
+        },
+        {
+          icon: "mdi-login",
+          title: "Login",
+          to: "/login",
+        },
+        {
+          icon: "mdi-logout",
+          title: "Logout",
+          to: "/logout",
         },
       ],
       bottomMenu: [
@@ -84,10 +97,18 @@ export default {
         if (
           this.$router.currentRoute.path !== "/register" &&
           this.$router.currentRoute.path !== "/login"
-        ) {
+        )
           return this.$router.push("/register");
-        }
       }
+    },
+    isDisabled(item) {
+      if (this.authenticated && item === "/login") {
+        return this.isDisable;
+      }
+      if (!this.authenticated && item === "/logout") {
+        return this.isDisable;
+      }
+      return false;
     },
   },
   watch: {
@@ -98,6 +119,11 @@ export default {
   mounted() {
     // localStorage.setItem("welcomeScreen", true);
     this.isWelcomeScreen();
+  },
+  computed: {
+    ...mapGetters("auth", {
+      authenticated: "authenticated",
+    }),
   },
 };
 </script>

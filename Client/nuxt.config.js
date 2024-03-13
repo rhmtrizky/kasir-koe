@@ -23,7 +23,12 @@ export default {
   css: ["@/assets/scss/main.scss"],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
+  plugins: [
+    {
+      src: "~/plugins/persitedState.js",
+      ssr: false,
+    },
+  ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -35,7 +40,22 @@ export default {
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: ["@nuxt/http"],
+  modules: ["@nuxtjs/axios", "@nuxtjs/i18n"],
+
+  i18n: {
+    langDir: "lang/",
+    defaultLocale: "id",
+    locales: [
+      {
+        code: "id",
+        name: "Indonesia",
+        iso: "id-ID",
+        file: "id.json",
+      },
+    ],
+  },
+
+  axios: {},
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {

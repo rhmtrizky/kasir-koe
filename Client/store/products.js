@@ -21,14 +21,14 @@ export const actions = {
     commit("updateCategoryId", categoryId);
   },
   fetchProducts({ commit }) {
-    return this.$http
+    return this.$axios
       .$get("http://localhost:5000/products")
       .then((response) => {
         commit("updateProducts", response.products);
       });
   },
   fetchCategories({ commit }) {
-    return this.$http
+    return this.$axios
       .$get("http://localhost:5000/categories")
       .then((response) => {
         commit("updateCategories", response.categories);

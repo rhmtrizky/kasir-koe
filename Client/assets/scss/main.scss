@@ -4,6 +4,7 @@ body {
   overflow: hidden !important;
 }
 
+// layout
 .frame-container {
   height: 91vh;
   overflow-y: auto;
@@ -18,4 +19,17 @@ body {
 .frame-container::-webkit-scrollbar-thumb {
   background-color: #dbdbdb;
   border-radius: 100px;
+}
+
+// spin loading
+.spin-loading {
+  animation: spin 1s infinite;
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

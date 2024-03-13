@@ -7,6 +7,7 @@
         >
         <v-card-text>
           <v-form>
+            <v-alert type="error" v-if="isWrong">{{ $t(message) }}</v-alert>
             <v-text-field
               name="email"
               label="Email"
@@ -21,12 +22,6 @@
               :rules="rules.password"
               v-model="form.password"
             />
-            <p
-              v-if="isWrong"
-              class="text-caption font-color-red text-lowercase font-italic my-0"
-            >
-              Email or Password is wrong!!
-            </p>
           </v-form>
         </v-card-text>
         <v-card-actions>
@@ -58,9 +53,13 @@
 </template>
 
 <script>
+import { mapMutations } from "vuex";
+
 export default {
+  middleware: ["unauthenticated"],
   data() {
     return {
+      message: "",
       isDisable: false,
       isWrong: false,
       form: {
@@ -74,21 +73,52 @@ export default {
     };
   },
   methods: {
+    ...mapMutations("auth", {
+      setFullname: "setFullname",
+      setAccessToken: "setAccessToken",
+      setRefreshToken: "setRefreshToken",
+    }),
+    storeWelcomeScreen() {
+      localStorage.setItem("welcomeScreen", true);
+    },
+    alertError() {
+      this.isWrong = true;
+      setTimeout(() => {
+        this.isWrong = false;
+      }, 3000);
+    },
     onSubmit() {
       this.isDisable = true;
-      this.$http
+      this.$axios
         .$post("http://localhost:5000/auth/login", this.form)
         .then((res) => {
+          //persited state
+          this.setFullname(res.fullname);
+          this.setAccessToken(res.accessToken);
+          this.setRefreshToken(res.refreshToken);
+
+          // store welcome screen
+          if (!localStorage.welcomeScreen) {
+            this.storeWelcomeScreen();
+          }
+          //disable button
           this.isDisable = false;
           // redirect to page home
           this.isWrong = false;
           this.$router.push("/");
         })
         .catch((err) => {
+          this.message = err.response.data.message;
           this.isDisable = false;
-          this.isWrong = true;
+          this.alertError();
         });
     },
+  },
+  mounted() {
+    if (this.$route.params.message == "AUTH_REQUIRED") {
+      this.message = "Please, you must login first";
+      this.alertError();
+    }
   },
 };
 </script>

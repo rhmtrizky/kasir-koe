@@ -59,9 +59,10 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapGetters } from "vuex";
 
 export default {
+  middleware: ["authenticated"],
   data() {
     return {
       search: null,
