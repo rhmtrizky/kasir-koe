@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import indexRouter from './routes/index.js';
 import cors from 'cors';
+import { connection } from './connection.js';
 
 const env = dotenv.config().parsed;
 let app = express();
@@ -19,14 +20,8 @@ app.use(
 
 app.use('/', indexRouter);
 
-mongoose.connect(`${env.MONGODB_URI}${env.MONGODB_HOST}:${env.MONGODB_PORT}`, {
-  dbName: env.MONGODB_DB_NAME,
-});
-const db = mongoose.connection;
-db.on('error', (err) => console.error.bind(console, 'connection error:', err));
-db.once('open', function () {
-  console.log('Connected to MongoDB');
-});
+// connect to mongodb
+connection();
 
 app.listen(env.APP_PORT, () => {
   console.log(`Server app running on port ${env.APP_PORT}`);

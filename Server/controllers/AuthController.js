@@ -16,6 +16,34 @@ const generateRefreshToken = async (payload) => {
   });
 };
 
+const isEmailExist = async (email) => {
+  const User = await user.findOne({ email: email });
+  if (!User) {
+    return false;
+  }
+  return true;
+};
+
+const checkEmail = async (req, res) => {
+  try {
+    const emailExist = await isEmailExist(req.body.email);
+    if (emailExist) {
+      throw { code: 409, message: 'EMAIL_EXIST' };
+    }
+
+    return res.status(200).json({
+      status: true,
+      message: 'EMAIL_NOT_EXIST',
+      emailExist,
+    });
+  } catch (err) {
+    return res.status(err.code).json({
+      status: false,
+      message: err.message,
+    });
+  }
+};
+
 const register = async (req, res) => {
   try {
     if (!req.body.fullname) {
@@ -29,7 +57,7 @@ const register = async (req, res) => {
     }
 
     // existing email cheking
-    const emailExist = await user.findOne({ email: req.body.email });
+    const emailExist = await isEmailExist(req.body.email);
     if (emailExist) {
       throw { code: 409, message: 'Email Already Used!' };
     }
@@ -100,6 +128,7 @@ const login = async (req, res) => {
     const refreshToken = await generateRefreshToken(payload);
 
     return res.status(200).json({
+      fullname: User.fullname,
       status: true,
       message: 'LOGIN_SUCCESS',
       accessToken,
@@ -152,4 +181,4 @@ const refreshToken = async (req, res) => {
   }
 };
 
-export { register, login, refreshToken };
+export { register, login, refreshToken, checkEmail };
