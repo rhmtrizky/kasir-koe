@@ -7,7 +7,7 @@
         >
         <v-card-text>
           <v-form>
-            <v-alert type="error" v-if="isWrong">{{ $t(message) }}</v-alert>
+            <v-alert type="error" v-if="isWrong">{{ message }}</v-alert>
             <v-text-field
               name="email"
               label="Email"

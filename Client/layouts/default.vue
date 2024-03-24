@@ -3,10 +3,9 @@
     <v-navigation-drawer v-model="sideDrawer" :mini-variant="miniVariant" app>
       <v-list>
         <v-list-item
-          v-for="(item, i) in items"
+          v-for="(item, i) in sideMenu"
           :key="i"
           :to="item.to"
-          :disabled="isDisabled(item.to)"
           router
           exact
         >
@@ -56,29 +55,45 @@ export default {
   name: "DefaultLayout",
   data() {
     return {
-      isDisable: true,
       sideDrawer: false,
       fixed: false,
-      items: [
+      sideMenu: [],
+      originalSideMenu: [
+        {
+          icon: "mdi-view-dashboard-variant",
+          title: "Dashboard",
+          to: "/dashboard",
+          middleware: ["authenticated"],
+        },
+        {
+          icon: "mdi-application",
+          title: "Cashier",
+          to: "/cashier",
+          middleware: ["admin", "cashier"],
+        },
         {
           icon: "mdi-account",
           title: "Account",
           to: "/account",
+          middleware: ["admin"],
         },
         {
-          icon: "mdi-bell",
-          title: "Notification",
-          to: "/notification",
+          icon: "mdi-fingerprint",
+          title: "Absence",
+          to: "/absence",
+          middleware: ["authenticated"],
         },
         {
           icon: "mdi-login",
           title: "Login",
           to: "/login",
+          middleware: ["unauthenticated"],
         },
         {
           icon: "mdi-logout",
           title: "Logout",
           to: "/logout",
+          middleware: ["authenticated"],
         },
       ],
       bottomMenu: [
@@ -101,28 +116,46 @@ export default {
           return this.$router.push("/register");
       }
     },
-    isDisabled(item) {
-      if (this.authenticated && item === "/login") {
-        return this.isDisable;
-      }
-      if (!this.authenticated && item === "/logout") {
-        return this.isDisable;
-      }
-      return false;
+    // isDisabled(item) {
+    //   if (this.authenticated && item === "/login") {
+    //     return this.isDisable;
+    //   }
+    //   if (!this.authenticated && item === "/logout") {
+    //     return this.isDisable;
+    //   }
+    //   return false;
+    // },
+    filterSideMenu() {
+      this.sideMenu = this.originalSideMenu.filter((item) => {
+        if (item.middleware.includes(this.user.role)) {
+          return true;
+        }
+        if (this.authenticated) {
+          return item.middleware.includes("authenticated");
+        } else {
+          return item.middleware.includes("unauthenticated");
+        }
+      });
     },
   },
   watch: {
     $route() {
       this.isWelcomeScreen();
     },
+    authenticated() {
+      this.filterSideMenu();
+    },
   },
   mounted() {
     // localStorage.setItem("welcomeScreen", true);
     this.isWelcomeScreen();
+    this.filterSideMenu();
+    console.log(this.user.role);
   },
   computed: {
     ...mapGetters("auth", {
       authenticated: "authenticated",
+      user: "user",
     }),
   },
 };
