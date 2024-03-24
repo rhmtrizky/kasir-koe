@@ -1,10 +1,7 @@
 import express from 'express';
-import { register, login, refreshToken, checkEmail } from '../controllers/AuthController.js';
+import { index } from '../controllers/UserController.js';
 var router = express.Router();
 
-router.post('/register', register);
-router.post('/login', login);
-router.post('/refresh-token', refreshToken);
-router.post('/check-email', checkEmail);
+router.get('/', index);
 
 export default router;
