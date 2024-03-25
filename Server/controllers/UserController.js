@@ -94,6 +94,33 @@ const store = async (req, res) => {
   }
 };
 
+const show = async (req, res) => {
+  try {
+    if (!req.params.id) {
+      throw { code: 428, message: 'ID is Required!' };
+    }
+
+    const User = await user.findById(req.params.id);
+
+    if (!User) {
+      throw { code: 404, message: 'USER_NOT_FOUND' };
+    }
+
+    return res.status(200).json({
+      status: true,
+      user: User,
+    });
+  } catch (err) {
+    if (!err.code) {
+      err.code = 500;
+    }
+    return res.status(err.code).json({
+      status: false,
+      message: err.message,
+    });
+  }
+};
+
 const update = async (req, res) => {
   try {
     if (!req.body.fullname) {
@@ -153,4 +180,4 @@ const update = async (req, res) => {
   }
 };
 
-export { index, store, update };
+export { index, store, update, show };
