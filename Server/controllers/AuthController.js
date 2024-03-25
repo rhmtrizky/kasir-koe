@@ -2,6 +2,7 @@ import user from '../models/User.js';
 import bcrypt from 'bcrypt';
 import jsonwebtoken from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import { isEmailExist } from '../libraries/isEmailExist.js';
 
 const env = dotenv.config().parsed;
 
@@ -14,14 +15,6 @@ const generateRefreshToken = async (payload) => {
   return jsonwebtoken.sign(payload, env.JWT_REFRESH_TOKEN_SECRET, {
     expiresIn: env.JWT_REFRESH_TOKEN_LIFE,
   });
-};
-
-const isEmailExist = async (email) => {
-  const User = await user.findOne({ email: email });
-  if (!User) {
-    return false;
-  }
-  return true;
 };
 
 const checkEmail = async (req, res) => {
