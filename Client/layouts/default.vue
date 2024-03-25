@@ -67,14 +67,14 @@ export default {
         },
         {
           icon: "mdi-application",
-          title: "Cashier",
-          to: "/cashier",
+          title: "Cashier App",
+          to: "/",
           middleware: ["admin", "cashier"],
         },
         {
           icon: "mdi-account",
-          title: "Account",
-          to: "/account",
+          title: "Users Management",
+          to: "/users",
           middleware: ["admin"],
         },
         {
@@ -150,7 +150,6 @@ export default {
     // localStorage.setItem("welcomeScreen", true);
     this.isWelcomeScreen();
     this.filterSideMenu();
-    console.log(this.user.role);
   },
   computed: {
     ...mapGetters("auth", {

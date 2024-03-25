@@ -1,11 +1,12 @@
 <template>
   <v-row>
-    <v-col cols="10" offset="1" md="4" offset-md="4">
+    <v-col cols="10" offset="1">
       <v-card>
         <v-toolbar color="primary" dark class="text-h5 font-weight-bold"
-          >Register</v-toolbar
+          >Create User</v-toolbar
         >
         <v-card-text>
+          <v-breadcrumbs :items="breadcrumbs" class="pa-0" />
           <v-form ref="form">
             <v-text-field
               name="fullname"
@@ -42,6 +43,9 @@
               :rules="rules.retype_password"
               v-model="form.retype_password"
             />
+            <v-select :items="roles" label="Role" v-model="form.role"
+              >Role</v-select
+            >
           </v-form>
         </v-card-text>
 
@@ -53,41 +57,38 @@
             color="primary"
             :disabled="isDisable"
           >
-            <span v-if="!isDisable">Register</span>
+            <span v-if="!isDisable">Save</span>
             <v-progress-circular v-else color="primary" indeterminate>
             </v-progress-circular>
           </v-btn>
         </v-card-actions>
       </v-card>
-      <p>
-        Kamu sudah punya akun?
-        <v-btn
-          to="/login"
-          plain
-          class="text-body-1 pl-0 text-capitalize font-italic"
-          color="blue"
-          >Login</v-btn
-        >
-      </p>
     </v-col>
   </v-row>
 </template>
 
 <script>
 export default {
-  middleware: ["unauthenticated"],
+  middleware: ["authenticated"],
   data() {
     return {
+      breadcrumbs: [
+        { text: "Users", disabled: false, to: "/users", exact: true },
+        { text: "Create", disabled: true },
+      ],
       message: "",
       isDisable: false,
       alertEmailExist: false,
+      roles: ["employee", "admin", "cashier"],
       form: {
         fullname: "",
         email: "",
         password: "",
         retype_password: "",
+        role: "",
       },
       rules: {
+        role: [(v) => !!v || "Role is required"],
         fullname: [(v) => !!v || "Fullname is required"],
         email: [
           (v) => !!v || "Email is required",
@@ -121,11 +122,11 @@ export default {
       if (this.$refs.form.validate()) {
         this.isDisable = true;
         this.$axios
-          .$post("http://localhost:5000/auth/register", this.form)
+          .$post("http://localhost:5000/users", this.form)
           .then((res) => {
             this.isDisable = false;
             // redirect to page login
-            this.$router.push("/login");
+            this.$router.push("/users");
           })
           .catch((err) => {
             this.isDisable = false;
