@@ -123,14 +123,15 @@ const show = async (req, res) => {
 
 const update = async (req, res) => {
   try {
+    if (!req.params.id) {
+      throw { code: 428, message: 'ID is Required!' };
+    }
+
     if (!req.body.fullname) {
       throw { code: 428, message: 'Fullname is Required!' };
     }
     if (!req.body.email) {
       throw { code: 428, message: 'Email is Required!' };
-    }
-    if (!req.body.password) {
-      throw { code: 428, message: 'Password is Required!' };
     }
     if (!req.body.role) {
       throw { code: 428, message: 'Role is Required!' };
@@ -180,4 +181,32 @@ const update = async (req, res) => {
   }
 };
 
-export { index, store, update, show };
+const destroy = async (req, res) => {
+  try {
+    if (!req.params.id) {
+      throw { code: 428, message: 'ID is Required!' };
+    }
+
+    const User = await user.findByIdAndDelete(req.params.id);
+
+    if (!User) {
+      throw { code: 500, message: 'USER_DELETE_FAILED' };
+    }
+
+    return res.status(200).json({
+      status: true,
+      message: 'USER_DELETE_SUCCESS',
+      user: User,
+    });
+  } catch (err) {
+    if (!err.code) {
+      err.code = 500;
+    }
+    return res.status(err.code).json({
+      status: false,
+      message: err.message,
+    });
+  }
+};
+
+export { index, store, update, show, destroy };
