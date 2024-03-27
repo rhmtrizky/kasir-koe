@@ -40,7 +40,7 @@ export default {
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: ["@nuxtjs/axios", "@nuxtjs/i18n"],
+  modules: ["@nuxtjs/axios", "@nuxtjs/i18n", "@nuxtjs/dotenv"],
 
   i18n: {
     langDir: "lang/",
@@ -56,7 +56,7 @@ export default {
   },
 
   axios: {
-    baseURL: "http://localhost:5000",
+    baseURL: process.env.API_URL,
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
