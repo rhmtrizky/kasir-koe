@@ -108,7 +108,7 @@ export default {
   methods: {
     checkEmail() {
       this.$axios
-        .$post("http://localhost:5000/auth/check-email", this.form)
+        .$post("/auth/check-email", this.form)
         .then((res) => {
           this.alertEmailExist = false;
         })
@@ -121,7 +121,7 @@ export default {
       if (this.$refs.form.validate()) {
         this.isDisable = true;
         this.$axios
-          .$post("http://localhost:5000/auth/register", this.form)
+          .$post("/auth/register", this.form)
           .then((res) => {
             this.isDisable = false;
             // redirect to page login

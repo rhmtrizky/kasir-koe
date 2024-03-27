@@ -109,7 +109,7 @@ export default {
   methods: {
     checkEmail() {
       this.$axios
-        .$post("http://localhost:5000/auth/check-email", this.form)
+        .$post("/auth/check-email", this.form)
         .then((res) => {
           this.alertEmailExist = false;
         })
@@ -122,11 +122,17 @@ export default {
       if (this.$refs.form.validate()) {
         this.isDisable = true;
         this.$axios
-          .$post("http://localhost:5000/users", this.form)
+          .$post("/users", this.form)
           .then((res) => {
             this.isDisable = false;
             // redirect to page login
-            this.$router.push("/users");
+            this.$router.push({
+              name: "users",
+              params: {
+                message: res.message,
+                fullname: this.form.fullname,
+              },
+            });
           })
           .catch((err) => {
             this.isDisable = false;

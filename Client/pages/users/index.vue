@@ -124,9 +124,7 @@ export default {
       const { page, itemsPerPage } = this.options;
       this.isLoading = true;
       this.$axios
-        .$get(
-          `http://localhost:5000/users?page=${page}&limit=${itemsPerPage}&search=${this.search}`
-        )
+        .$get(`/users?page=${page}&limit=${itemsPerPage}&search=${this.search}`)
         .then((response) => {
           this.isLoading = false;
           this.users = response.users.docs;
@@ -142,7 +140,7 @@ export default {
     },
     deleteConfirm(id) {
       this.$axios
-        .$delete(`http://localhost:5000/users/${id}`)
+        .$delete(`/users/${id}`)
         .then((res) => {
           this.dialogDelete = false;
           this.fetchUsers();
@@ -196,6 +194,15 @@ export default {
         show: true,
         type: "error",
         message: `Failed Update data ${this.$route.params.fullname}`,
+      };
+      setTimeout(() => {
+        this.alert.show = false;
+      }, 3000);
+    } else if (this.$route.params.message == "USER_REGISTER_SUCCESS") {
+      this.alert = {
+        show: true,
+        type: "success",
+        message: `Success Register data ${this.$route.params.fullname}`,
       };
       setTimeout(() => {
         this.alert.show = false;

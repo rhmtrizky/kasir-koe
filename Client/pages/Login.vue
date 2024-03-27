@@ -90,7 +90,7 @@ export default {
     onSubmit() {
       this.isDisable = true;
       this.$axios
-        .$post("http://localhost:5000/auth/login", this.form)
+        .$post("/auth/login", this.form)
         .then((res) => {
           //persited state
           this.setFullname(res.fullname);

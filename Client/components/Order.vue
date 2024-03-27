@@ -82,6 +82,11 @@
 <script>
 import { mapState, mapGetters, mapActions } from "vuex";
 export default {
+  data() {
+    return {
+      items1: [],
+    };
+  },
   methods: {
     ...mapActions("carts", {
       increment: "increment",

@@ -113,7 +113,7 @@ export default {
   methods: {
     checkEmail() {
       this.$axios
-        .$post("http://localhost:5000/auth/check-email", this.form)
+        .$post("/auth/check-email", this.form)
         .then((res) => {
           this.alertEmailExist = false;
         })
@@ -124,7 +124,7 @@ export default {
     },
     fetchData() {
       this.$axios
-        .$get(`http://localhost:5000/users/${this.id}`)
+        .$get(`/users/${this.id}`)
         .then((res) => {
           (this.form.fullname = res.user.fullname),
             (this.form.email = res.user.email),
@@ -143,7 +143,7 @@ export default {
       if (this.$refs.form.validate()) {
         this.isDisable = true;
         this.$axios
-          .$put(`http://localhost:5000/users/${this.id}`, this.form)
+          .$put(`/users/${this.id}`, this.form)
           .then((res) => {
             this.isDisable = false;
             // redirect to page login
