@@ -146,12 +146,9 @@ const refreshToken = async (req, res) => {
 
     // verify token
     const verify = await jsonwebtoken.verify(req.body.refreshToken, env.JWT_REFRESH_TOKEN_SECRET);
-    if (!verify) {
-      throw { code: 401, message: 'REFRESH_TOKEN_INVALID' };
-    }
 
     const payload = {
-      _id: verify._id,
+      id: verify.id,
       role: verify.role,
     };
     const accessToken = await generateAccessToken(payload);
@@ -164,6 +161,11 @@ const refreshToken = async (req, res) => {
       refreshToken,
     });
   } catch (err) {
+    if (err.message == 'jwt expired') {
+      err.message = 'REFRESH_TOKEN_EXPIRED';
+    } else {
+      err.message = 'REFRESH_TOKEN_INVALID';
+    }
     if (!err.code) {
       err.code = 500;
     }

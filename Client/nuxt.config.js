@@ -28,6 +28,10 @@ export default {
       src: "~/plugins/persitedState.js",
       ssr: false,
     },
+    {
+      src: "~/plugins/axiosInterceptors.js",
+      ssr: false,
+    },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

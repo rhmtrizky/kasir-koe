@@ -16,12 +16,10 @@ const run = async (limit) => {
     const fakeData = await user.insertMany(data);
 
     if (fakeData) {
-      console.log(fakeData);
       console.log('Jumlah data yg ditambahkan : ', fakeData.length);
       process.exit();
     }
   } catch (error) {
-    console.log(error);
     process.exit();
   }
 };
