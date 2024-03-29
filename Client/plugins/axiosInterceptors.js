@@ -1,4 +1,4 @@
-export default function ({ $axios, store }) {
+export default function ({ $axios, store, redirect }) {
   $axios.onRequest((config) => {
     if (store.getters["auth/authenticated"]) {
       config.headers[
@@ -7,13 +7,15 @@ export default function ({ $axios, store }) {
     }
   });
 
-  $axios.onError((error) => {
-    if (error.response.status == 401) {
+  $axios.onResponseError((error) => {
+    console.log(error.response.status);
+    if (error.response.status === 401) {
       return $axios
         .$post("/auth/refresh-token", {
           refreshToken: store.state.auth.refreshToken,
         })
         .then((response) => {
+          console.log(response);
           store.commit("auth/setAccessToken", response.accessToken);
           store.commit("auth/setRefreshToken", response.refreshToken);
 
@@ -25,7 +27,7 @@ export default function ({ $axios, store }) {
         })
         .catch((error) => {
           if (
-            error.response.data.message == "REFRESH_TOKEN_EXPRIRED" ||
+            error.response.data.message == "REFRESH_TOKEN_EXPIRED" ||
             error.response.data.message == "REFRESH_TOKEN_INVALID"
           ) {
             store.commit("auth/logout");

@@ -56,7 +56,7 @@
 import { mapMutations } from "vuex";
 
 export default {
-  middleware: ["unauthenticated"],
+  // middleware: ["unauthenticated"],
   data() {
     return {
       message: "",
