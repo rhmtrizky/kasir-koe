@@ -55,11 +55,8 @@
             @click="onSubmit"
             class="mb-3 mr-3"
             color="primary"
-            :disabled="isDisable"
-          >
-            <span v-if="!isDisable">Save</span>
-            <v-progress-circular v-else color="primary" indeterminate>
-            </v-progress-circular>
+            :loading="isDisable"
+            >Save
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -70,6 +67,9 @@
 <script>
 export default {
   middleware: ["authenticated"],
+  head: {
+    title: "User Edit",
+  },
   asyncData({ params }) {
     return { id: params.id };
   },

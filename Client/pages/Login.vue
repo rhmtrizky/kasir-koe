@@ -26,7 +26,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn
+          <!-- <v-btn
             class="mb-3 mr-3"
             color="primary"
             @click="onSubmit"
@@ -35,6 +35,14 @@
             <span v-if="!isDisable">Login</span>
             <v-progress-circular v-else color="primary" indeterminate>
             </v-progress-circular>
+          </v-btn> -->
+          <v-btn
+            class="mb-3 mr-3"
+            color="primary"
+            @click="onSubmit"
+            :loading="isDisable"
+          >
+            Login
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -57,6 +65,9 @@ import { mapMutations } from "vuex";
 
 export default {
   // middleware: ["unauthenticated"],
+  head: {
+    title: "Login",
+  },
   data() {
     return {
       message: "",
@@ -105,7 +116,7 @@ export default {
           this.isDisable = false;
           // redirect to page home
           this.isWrong = false;
-          this.$router.push("/");
+          this.$router.push("/dashboard");
         })
         .catch((err) => {
           this.message = err.response.data.message;

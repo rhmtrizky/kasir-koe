@@ -51,11 +51,9 @@
             @click="onSubmit"
             class="mb-3 mr-3"
             color="primary"
-            :disabled="isDisable"
+            :loading="isDisable"
           >
-            <span v-if="!isDisable">Register</span>
-            <v-progress-circular v-else color="primary" indeterminate>
-            </v-progress-circular>
+            Register
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -76,6 +74,9 @@
 <script>
 export default {
   middleware: ["unauthenticated"],
+  head: {
+    title: "Register",
+  },
   data() {
     return {
       message: "",

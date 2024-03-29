@@ -84,6 +84,9 @@
 <script>
 export default {
   middleware: ["authenticated"],
+  head: {
+    title: "Users Management",
+  },
   data() {
     return {
       alert: {

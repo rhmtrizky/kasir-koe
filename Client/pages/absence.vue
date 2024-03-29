@@ -2,7 +2,7 @@
   <v-row>
     <v-col cols="8" class="frame-container px-3">
       <v-card>
-        <v-card-title>ACCOUNT</v-card-title>
+        <v-card-title>Absence</v-card-title>
       </v-card>
     </v-col>
   </v-row>
@@ -11,5 +11,8 @@
 <script>
 export default {
   middleware: ["authenticated"],
+  head: {
+    title: "Absence",
+  },
 };
 </script>

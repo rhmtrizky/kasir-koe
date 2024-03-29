@@ -13,5 +13,8 @@ import Order from '../components/Order.vue';
 <script>
 export default {
   middleware: ["authenticated"],
+  head: {
+    title: "Cahsier App",
+  },
 };
 </script>

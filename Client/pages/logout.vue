@@ -15,6 +15,9 @@
 import { mapMutations } from "vuex";
 export default {
   middleware: ["authenticated"],
+  head: {
+    title: "Logout",
+  },
   methods: {
     ...mapMutations("auth", {
       setFullname: "setFullname",

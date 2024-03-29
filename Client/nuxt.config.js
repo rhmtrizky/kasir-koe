@@ -5,8 +5,8 @@ export default {
   ssr: false,
 
   head: {
-    titleTemplate: "%s - cashier",
-    title: "cashier",
+    titleTemplate: "%s - Cashier",
+    title: "Cashier",
     htmlAttrs: {
       lang: "en",
     },
