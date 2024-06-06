@@ -72,6 +72,12 @@ export default {
           middleware: ["admin", "cashier"],
         },
         {
+          icon: "mdi-application",
+          title: "Orders",
+          to: "/orders",
+          middleware: ["admin", "cashier", "waiter"],
+        },
+        {
           icon: "mdi-account",
           title: "Users Management",
           to: "/users",

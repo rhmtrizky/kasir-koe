@@ -73,7 +73,7 @@
 
 <script>
 export default {
-  middleware: ["unauthenticated"],
+  // middleware: ["unauthenticated"],
   head: {
     title: "Register",
   },

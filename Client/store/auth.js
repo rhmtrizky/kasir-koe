@@ -9,7 +9,10 @@ export const state = () => ({
 export const getters = {
   authenticated: (state) => {
     if (state.accessToken) {
-      return true;
+      return {
+        fullname: state.fullname,
+        status: true,
+      };
     }
     return false;
   },

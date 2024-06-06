@@ -75,6 +75,11 @@
           </v-list-item>
         </v-list-group>
       </v-list>
+      <div class="d-flex justify-end width-full mt-5">
+        <v-form ref="form" @submit.prevent="onSubmit" v-if="items.length">
+          <v-btn color="primary" @click="onSubmit">Submit Order</v-btn>
+        </v-form>
+      </div>
     </v-col>
   </v-row>
 </template>
@@ -92,6 +97,7 @@ export default {
       increment: "increment",
       decrement: "decrement",
       removeItem: "removeItem",
+      clearCart: "clearCart",
     }),
     currency(value) {
       return Intl.NumberFormat("id-ID", {
@@ -99,7 +105,40 @@ export default {
         currency: "IDR",
       }).format(value);
     },
+    async onSubmit() {
+      // Check if form is valid
+      if (this.$refs.form.validate()) {
+        // this.isDisable = true; // Disable the button to prevent multiple submissions
+        try {
+          // Extract product IDs from cart items
+          const productIds = this.cartItems.map((item) => item.id);
+
+          // Send a POST request to the server with the product IDs
+          const res = await this.$axios.$post("/orders", { productIds });
+          console.log(res);
+
+          if (res) {
+            this.clearCart();
+          }
+          // this.isDisable = false;
+
+          // Redirect to the orders page with a success message
+          // this.$router.push({
+          //   name: "orders",
+          //   params: {
+          //     message: "ORDER_SUBMITTED_SUCCESS",
+          //     orderNumber: res.order.orderNumber,
+          //   },
+          // });
+        } catch (err) {
+          // this.isDisable = false;
+          console.error(err);
+          // Handle error and show appropriate message to user
+        }
+      }
+    },
   },
+
   computed: {
     ...mapState("carts", {
       items: "items",

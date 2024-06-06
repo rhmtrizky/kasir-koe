@@ -74,6 +74,9 @@ export const mutations = {
     let index = state.items.findIndex((item) => item.id === id);
     state.items.splice(index, 1);
   },
+  clearCart(state) {
+    state.items = [];
+  },
 };
 
 export const actions = {
@@ -93,5 +96,8 @@ export const actions = {
   },
   removeItem({ commit }, id) {
     commit("removeItem", id);
+  },
+  clearCart({ commit }) {
+    commit("clearCart");
   },
 };
