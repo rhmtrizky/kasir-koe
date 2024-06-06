@@ -1,7 +1,6 @@
 import express from 'express';
 import logger from 'morgan';
 import dotenv from 'dotenv';
-import mongoose from 'mongoose';
 import indexRouter from './routes/index.js';
 import cors from 'cors';
 import { connection } from './connection.js';

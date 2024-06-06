@@ -14,6 +14,7 @@ const index = async (req, res) => {
     };
 
     const users = await user.paginate(find, options);
+    console.log(users);
 
     if (!users) {
       throw { code: 500, message: 'GET_USERS_FAILED' };
